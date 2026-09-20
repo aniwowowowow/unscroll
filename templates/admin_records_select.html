@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Unscroll - Admin Records</title>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/style.css">
+    <style>
+        body { padding: 2rem; }
+        .box { max-width: 400px; margin: 0 auto; }
+        ul { list-style: none; padding: 0; margin: 0.5rem 0 0; }
+        li { margin-bottom: 0.5rem; }
+        li a {
+            color: var(--ink); text-decoration: none; display: block; padding: 0.6rem;
+            border-radius: 6px; background: #F5F3EC; font-weight: 600;
+        }
+        li a:hover { background: var(--highlight-soft); }
+        .inactive-tag { color: var(--danger); font-weight: 600; font-size: 0.8rem; }
+        .reset-box { margin-top: 1.5rem; padding-top: 1.25rem; border-top: 1px solid var(--border); }
+        .reset-box p { font-size: 0.8rem; color: var(--ink-muted); margin: 0.4rem 0 0.6rem; }
+    </style>
+</head>
+<body>
+    <div class="card box">
+        <a class="back-link" href="/">&larr; Back to leaderboard</a>
+        <h1>Select a user to view/edit records</h1>
+        <ul>
+            {% for user in users %}
+            <li>
+                <a href="/admin/records/{{ user.id }}">
+                    {{ user.display_name }}{% if user.is_admin %} (admin){% endif %}
+                    {% if not user.active %}<span class="inactive-tag"> &middot; inactive</span>{% endif %}
+                </a>
+            </li>
+            {% endfor %}
+        </ul>
+
+        <div class="reset-box">
+            <strong>Reset challenge data</strong>
+            <p>Wipes every entry, weekly result, and the final forfeit for everyone. User accounts stay intact. Use this once, right before the real challenge starts.</p>
+            <form method="post" action="/admin/reset-challenge"
+                  onsubmit="return confirm('This will permanently delete ALL entries and forfeit history for EVERYONE. User accounts stay. Are you sure you want to reset the challenge?');">
+                <button type="submit" class="btn-danger">Reset all challenge data</button>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

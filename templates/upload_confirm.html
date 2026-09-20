@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Unscroll - Confirm (3/3)</title>
+    <style>
+        body { font-family: system-ui, sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; background: #f4f4f4; }
+        .box { background: white; padding: 2rem; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); width: 320px; max-width: 90vw; }
+        h1 { font-size: 1.1rem; margin-bottom: 0.25rem; }
+        .step { color: #888; font-size: 0.85rem; margin-bottom: 1rem; }
+        label { display: block; font-size: 0.9rem; margin-bottom: 0.25rem; margin-top: 0.75rem; }
+        input[type="number"] { width: 100%; padding: 0.5rem; box-sizing: border-box; }
+        .hint { font-size: 0.8rem; color: #c00; margin-top: 0.25rem; }
+        button { width: 100%; padding: 0.6rem; background: #333; color: white; border: none; border-radius: 4px; cursor: pointer; margin-top: 1.25rem; }
+    </style>
+</head>
+<body>
+    <div class="box">
+        <div class="step">Step 3 of 3</div>
+        <h1>Confirm your screentime</h1>
+        <form method="post" action="/upload/confirm">
+            <label for="total_minutes">Total screentime (minutes)</label>
+            <input type="number" id="total_minutes" name="total_minutes"
+                value="{{ total_minutes if total_confident else '' }}" required>
+            {% if not total_confident %}
+            <div class="hint">Couldn't read this clearly -- please enter manually.</div>
+            {% endif %}
+
+            <label for="social_minutes">Social media screentime (minutes)</label>
+            <input type="number" id="social_minutes" name="social_minutes"
+                value="{{ social_minutes if social_confident else '' }}" required>
+            {% if not social_confident %}
+            <div class="hint">Couldn't read this clearly -- please enter manually.</div>
+            {% endif %}
+
+            <button type="submit">Submit</button>
+        </form>
+    </div>
+</body>
+</html>

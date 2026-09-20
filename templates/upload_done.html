@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Unscroll - Submitted</title>
+    <style>
+        body { font-family: system-ui, sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; background: #f4f4f4; }
+        .box { background: white; padding: 2rem; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); width: 320px; max-width: 90vw; text-align: center; }
+        h1 { font-size: 1.3rem; margin-bottom: 1rem; }
+        .rank-line { margin: 0.5rem 0; font-size: 0.95rem; }
+        .score { font-size: 1.8rem; font-weight: bold; margin: 0.75rem 0; }
+        a { display: block; margin-top: 1.25rem; color: #333; }
+    </style>
+</head>
+<body>
+    <div class="box">
+        <h1>Submitted! ✅</h1>
+        <div class="rank-line">Today's total rank: #{{ total_rank }}</div>
+        <div class="rank-line">Today's social rank: #{{ social_rank }}</div>
+        <div class="score">{{ combined_score }} points</div>
+        <a href="/">View full leaderboard</a>
+    </div>
+</body>
+</html>

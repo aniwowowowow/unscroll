@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Unscroll - Leaderboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/style.css">
+    <style>
+        body { padding: 2rem; }
+        .wrap { max-width: 800px; margin: 0 auto; }
+        .top-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem; }
+        .top-bar .logo { margin-bottom: 0; }
+        .top-bar a.logout { color: var(--ink-muted); text-decoration: none; font-size: 0.9rem; }
+        .rank { font-weight: 700; width: 2rem; }
+        .score { font-weight: 800; }
+        .actions { margin-top: 1.5rem; display: flex; gap: 0.75rem; flex-wrap: wrap; }
+        .table-scroll { overflow-x: auto; }
+    </style>
+</head>
+<body>
+    <div class="wrap">
+        <div class="top-bar">
+            <a href="/" class="logo">
+                <svg width="24" height="24" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="14" cy="14" r="11" stroke="#2F6F4E" stroke-width="3"/>
+                    <path d="M14 14 L14 5 A9 9 0 0 1 21 10" stroke="#E8B84B" stroke-width="3" stroke-linecap="round" fill="none"/>
+                </svg>
+                unscroll
+            </a>
+            <a class="logout" href="/logout">Logged in as {{ current_user.display_name }} &middot; Log out</a>
+        </div>
+
+        <div class="progress-section">
+            <div class="progress-label">
+                <span>Day <strong>{{ day_number }}</strong> of {{ challenge_length }}</span>
+                <span>{{ progress_percent }}%</span>
+            </div>
+            <div class="progress-track">
+                <div class="progress-fill" style="width: {{ progress_percent }}%;"></div>
+            </div>
+        </div>
+
+        <div class="tabs">
+            <a href="/?tab=today" class="{{ 'active' if active_tab == 'today' else '' }}">Today</a>
+            <a href="/?tab=week" class="{{ 'active' if active_tab == 'week' else '' }}">This Week</a>
+            <a href="/?tab=total" class="{{ 'active' if active_tab == 'total' else '' }}">Total Competition</a>
+        </div>
+
+        <div class="table-scroll">
+        <table>
+            <tr>
+                <th>#</th>
+                <th>Name</th>
+                <th>Total Screentime</th>
+                <th>Social Screentime</th>
+                <th>Total Pts</th>
+                <th>Social Pts</th>
+                <th>Score</th>
+            </tr>
+            {% for row in rows %}
+            <tr>
+                <td class="rank">{{ loop.index }}</td>
+                <td>
+                    {{ row.display_name }}
+                    {% if active_tab == 'today' and row.missed %}
+                    <span class="missed-flag">🚩</span>
+                    {% elif active_tab != 'today' and row.missed_days > 0 %}
+                    <span class="missed-flag">{{ row.missed_days }}x🚩</span>
+                    {% endif %}
+                </td>
+                <td>{{ row.total_display }}</td>
+                <td>{{ row.social_display }}</td>
+                <td>{{ row.total_points }}</td>
+                <td>{{ row.social_points }}</td>
+                <td class="score">{{ row.combined_score }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+        </div>
+
+        <div class="actions">
+            <a class="btn" href="/upload/step1">Submit screentime</a>
+            <a class="btn" href="/forfeits">Forfeits</a>
+            {% if current_user.is_admin %}
+            <a class="btn" href="/admin/records">Admin records</a>
+            {% endif %}
+        </div>
+    </div>
+</body>
+</html>

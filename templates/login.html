@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Unscroll - Login</title>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/style.css">
+    <style>
+        body { display: flex; justify-content: center; align-items: center; height: 100vh; }
+        .login-box { width: 320px; max-width: 90vw; }
+        input { margin-bottom: 0.75rem; }
+        button { width: 100%; }
+    </style>
+</head>
+<body>
+    <div class="card login-box">
+        <a href="/" class="logo" style="justify-content: center;">
+            <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="14" cy="14" r="11" stroke="#2F6F4E" stroke-width="3"/>
+                <path d="M14 14 L14 5 A9 9 0 0 1 21 10" stroke="#E8B84B" stroke-width="3" stroke-linecap="round" fill="none"/>
+            </svg>
+            unscroll
+        </a>
+        {% if error %}
+        <div class="error">{{ error }}</div>
+        {% endif %}
+        <form method="post" action="/login">
+            <input type="text" name="username" placeholder="Username" required>
+            <input type="password" name="password" placeholder="Password" required>
+            <button type="submit">Log in</button>
+        </form>
+    </div>
+</body>
+</html>

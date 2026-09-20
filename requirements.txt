@@ -1,10 +1,14 @@
 fastapi
 uvicorn[standard]
 sqlalchemy
-psycopg2-binary
+pg8000
 boto3
 pytesseract
 pillow
 python-multipart
 jinja2
 python-dotenv
+bcrypt-4.0.1
+google-genai
+itsdangerous
+tzdata

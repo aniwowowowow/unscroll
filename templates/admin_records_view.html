@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Unscroll - {{ target_user.display_name }}'s Records</title>
+    <style>
+        body { font-family: system-ui, sans-serif; padding: 2rem; background: #f4f4f4; }
+        .box { max-width: 700px; margin: 0 auto; }
+        h1 { font-size: 1.2rem; }
+        table { width: 100%; border-collapse: collapse; background: white; margin-top: 1rem; }
+        th, td { padding: 0.5rem; text-align: left; border-bottom: 1px solid #eee; font-size: 0.9rem; }
+        input[type="number"] { width: 70px; padding: 0.25rem; }
+        button { padding: 0.3rem 0.6rem; cursor: pointer; }
+        .add-box { background: white; padding: 1rem; border-radius: 8px; margin-top: 1.5rem; }
+        .add-box input { padding: 0.4rem; margin-right: 0.5rem; }
+        a.back { display: inline-block; margin-bottom: 1rem; color: #333; }
+        a.shot-link { font-size: 0.8rem; color: #06c; }
+        .no-shot { font-size: 0.8rem; color: #999; }
+    </style>
+</head>
+<body>
+    <div class="box">
+        <a class="back" href="/">&larr; Back to leaderboard</a>
+        <a class="back" href="/admin/records">&larr; Back to user list</a>
+        <h1>{{ target_user.display_name }}'s records</h1>
+
+        <p>
+            Status:
+            {% if target_user.active %}
+            <strong style="color: green;">Active</strong>
+            {% else %}
+            <strong style="color: #c00;">Deactivated</strong>
+            {% endif %}
+            <form method="post" action="/admin/records/{{ target_user.id }}/toggle-active" style="display: inline;">
+                <button type="submit">
+                    {{ "Deactivate user" if target_user.active else "Reactivate user" }}
+                </button>
+            </form>
+            <form method="post" action="/admin/records/{{ target_user.id }}/delete-user" style="display: inline;"
+                  onsubmit="return confirm('PERMANENTLY delete {{ target_user.display_name }} and ALL their entries? This cannot be undone.');">
+                <button type="submit" style="background: #c00; color: white;">Delete user entirely</button>
+            </form>
+        </p>
+
+        <div style="overflow-x: auto;">
+        <table>
+            <tr>
+                <th>Date</th>
+                <th>Total (min)</th>
+                <th>Social (min)</th>
+                <th>Screenshots</th>
+                <th></th>
+                <th></th>
+            </tr>
+            {% for item in entries %}
+            <tr>
+                <form method="post" action="/admin/records/{{ target_user.id }}/edit">
+                <td>
+                    {{ item.entry.entry_date }}
+                    <input type="hidden" name="entry_date" value="{{ item.entry.entry_date }}">
+                </td>
+                <td><input type="number" name="total_minutes" value="{{ item.entry.total_minutes or '' }}"></td>
+                <td><input type="number" name="social_minutes" value="{{ item.entry.social_minutes or '' }}"></td>
+                <td>
+                    {% if item.total_screenshot_url %}
+                    <a class="shot-link" href="{{ item.total_screenshot_url }}" target="_blank">Total</a>
+                    {% else %}
+                    <span class="no-shot">Total (expired)</span>
+                    {% endif %}
+                    /
+                    {% if item.apps_screenshot_url %}
+                    <a class="shot-link" href="{{ item.apps_screenshot_url }}" target="_blank">Apps</a>
+                    {% else %}
+                    <span class="no-shot">Apps (expired)</span>
+                    {% endif %}
+                </td>
+                <td>
+                    <button type="submit">Save</button>
+                </td>
+                </form>
+                <td>
+                    <form method="post" action="/admin/records/{{ target_user.id }}/delete/{{ item.entry.id }}"
+                          onsubmit="return confirm('Delete this entry permanently? This cannot be undone.');">
+                        <button type="submit" style="background: #c00; color: white;">Delete</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+        </div>
+
+        <div class="add-box">
+            <h3>Add / edit an entry for a specific date</h3>
+            <form method="post" action="/admin/records/{{ target_user.id }}/edit">
+                <input type="date" name="entry_date" value="{{ today }}" required>
+                <input type="number" name="total_minutes" placeholder="Total min" required>
+                <input type="number" name="social_minutes" placeholder="Social min" required>
+                <button type="submit">Save</button>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Unscroll - Forfeits</title>
+    <style>
+        body { font-family: system-ui, sans-serif; background: #f4f4f4; padding: 2rem; }
+        .wrap { max-width: 700px; margin: 0 auto; }
+        a.back { display: inline-block; margin-bottom: 1rem; color: #333; text-decoration: none; }
+        h1 { font-size: 1.2rem; }
+        h2 { font-size: 1rem; margin-top: 2rem; }
+        table { width: 100%; border-collapse: collapse; background: white; margin-top: 0.75rem; border-radius: 8px; overflow: hidden; }
+        th, td { padding: 0.6rem; text-align: left; border-bottom: 1px solid #eee; font-size: 0.9rem; }
+        th { background: #fafafa; font-size: 0.8rem; color: #666; text-transform: uppercase; }
+        .completed { color: green; }
+        .pending { color: #c90; }
+        .admin-box { background: white; padding: 1rem; border-radius: 8px; margin-top: 1rem; }
+        .admin-box input, .admin-box select, .admin-box textarea { padding: 0.4rem; margin: 0.25rem 0.5rem 0.5rem 0; }
+        .final-box { background: #fff8e1; padding: 1.25rem; border-radius: 8px; margin-top: 0.75rem; text-align: center; }
+        .final-box .forfeit-text { font-size: 1.2rem; font-weight: bold; margin: 0.5rem 0; }
+        .suggestion { font-size: 0.85rem; color: #666; margin-top: 0.25rem; }
+    </style>
+</head>
+<body>
+    <div class="wrap">
+        <a class="back" href="/">&larr; Back to leaderboard</a>
+        <h1>Forfeits</h1>
+
+        <h2>Weekly losers</h2>
+        <table>
+            <tr>
+                <th>Week</th>
+                <th>Loser</th>
+                <th>Forfeit</th>
+                <th>Status</th>
+            </tr>
+            {% for wr in weekly_results %}
+            <tr>
+                <td>Week {{ wr.week_number }}</td>
+                <td>{{ wr.loser.display_name if wr.loser else "--" }}</td>
+                <td>{{ wr.forfeit_description or "--" }}</td>
+                <td class="{{ 'completed' if wr.completed else 'pending' }}">
+                    {{ "Done" if wr.completed else "Pending" }}
+                </td>
+            </tr>
+            {% else %}
+            <tr><td colspan="4">No weekly results recorded yet.</td></tr>
+            {% endfor %}
+        </table>
+
+        {% if current_user.is_admin %}
+        <div class="admin-box">
+            <strong>Record / update a week's forfeit</strong>
+            {% if suggested_loser_name %}
+            <div class="suggestion">Suggested (current worst this week): {{ suggested_loser_name }}</div>
+            {% endif %}
+            <form method="post" action="/forfeits/week/save">
+                <div>
+                    <label>Week #</label>
+                    <input type="number" name="week_number" value="{{ suggested_week_number }}" required>
+                </div>
+                <div>
+                    <label>Loser</label>
+                    <select name="loser_id" required>
+                        {% for user in all_users %}
+                        <option value="{{ user.id }}">{{ user.display_name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div>
+                    <label>Forfeit description</label><br>
+                    <textarea name="forfeit_description" rows="2" style="width: 100%;" required></textarea>
+                </div>
+                <div>
+                    <label><input type="checkbox" name="completed" value="true"> Completed</label>
+                </div>
+                <button type="submit">Save</button>
+            </form>
+        </div>
+        {% endif %}
+
+        <h2>Final forfeit (100-day loser)</h2>
+        {% if challenge_summary %}
+        <div class="final-box">
+            <div>Loser: <strong>{{ challenge_summary.loser.display_name if challenge_summary.loser else "TBD" }}</strong></div>
+            <div class="forfeit-text">{{ challenge_summary.major_forfeit or "Not yet decided" }}</div>
+            <div class="{{ 'completed' if challenge_summary.completed_at else 'pending' }}">
+                {{ "Completed" if challenge_summary.completed_at else "Pending" }}
+            </div>
+        </div>
+        {% else %}
+        <div class="final-box">Not set yet.</div>
+        {% endif %}
+
+        {% if current_user.is_admin %}
+        <div class="admin-box">
+            <strong>Set / update the final forfeit</strong>
+            <form method="post" action="/forfeits/final/save">
+                <div>
+                    <label>Loser</label>
+                    <select name="loser_id" required>
+                        {% for user in all_users %}
+                        <option value="{{ user.id }}">{{ user.display_name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div>
+                    <label>Forfeit description</label><br>
+                    <textarea name="major_forfeit" rows="2" style="width: 100%;" required></textarea>
+                </div>
+                <div>
+                    <label><input type="checkbox" name="completed" value="true"> Completed</label>
+                </div>
+                <button type="submit">Save</button>
+            </form>
+        </div>
+        {% endif %}
+    </div>
+</body>
+</html>

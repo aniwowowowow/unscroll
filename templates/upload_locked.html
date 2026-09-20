@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Unscroll - Upload closed</title>
+    <style>
+        body { font-family: system-ui, sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; background: #f4f4f4; }
+        .box { background: white; padding: 2rem; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); width: 320px; max-width: 90vw; text-align: center; }
+        h1 { font-size: 1.2rem; margin-bottom: 0.75rem; }
+        p { color: #555; font-size: 0.9rem; }
+        a { display: block; margin-top: 1.25rem; color: #333; }
+    </style>
+</head>
+<body>
+    <div class="box">
+        <h1>Upload window closed 🔒</h1>
+        <p>
+            The window to upload your screentime for {{ target_date }}
+            closed at 4:00 PM. That day's entry is now locked and will
+            count as a missed upload.
+        </p>
+        <a href="/">Back to leaderboard</a>
+    </div>
+</body>
+</html>
