@@ -41,6 +41,25 @@ design, database modeling, OCR/image processing, and AWS infrastructure.
   reset all challenge data
 - Deployed on AWS EC2 with HTTPS
 
+## Screenshots
+
+### Leaderboard
+"Today" tab before anyone's uploaded yet for that day:
+![Leaderboard - today, empty](screenshots\Todayempty.png)
+
+Final standings (Total Competition tab) at the end of the challenge:
+![Leaderboard - final standings](screenshots\Finalboard.png)
+
+### Admin tools
+Select a user to view/edit their records:
+![Admin - user selector](screenshots\Adminselector.png)
+
+A user's full entry history, with inline edit:
+![Admin - user records](screenshots\Adminview.png)
+
+### AWS infrastructure & cost
+![AWS cost summary](screenshots\AWSCOST.png)
+
 ## Tech stack
 
 | Layer | Choice | Why |
@@ -459,6 +478,5 @@ exists yet).
   Remove-Item -Recurse -Force`) before assuming a deeper bug saved
   significant debugging time.
 
-## License
 
 Personal/portfolio project -- not currently licensed for reuse.
