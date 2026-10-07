@@ -1,4 +1,11 @@
 # Unscroll
+> **Project status:** The live challenge ran for about 2 weeks before
+> the group's interest tapered off, which is a normal outcome for an
+> informal friend challenge. The AWS infrastructure (EC2, RDS, S3) has
+> since been decommissioned to avoid ongoing costs. The code, design,
+> and architecture below reflect a fully working, tested, and deployed
+> application -- this repo stands as a complete portfolio project
+> rather than a currently-live service.
 
 A 100-day screentime accountability challenge app built for a group of 5 friends.
 Each day, everyone uploads screenshots of their phone's screentime summary; the
